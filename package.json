@@ -1,0 +1,23 @@
+{
+  "name": "yelpcamp",
+  "version": "1.0.0",
+  "description": "My first full stack JS app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Evie-Skinner18/yelp_camp.git"
+  },
+  "author": "Evie-Skinner18",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Evie-Skinner18/yelp_camp/issues"
+  },
+  "homepage": "https://github.com/Evie-Skinner18/yelp_camp#readme",
+  "dependencies": {
+    "ejs": "^2.7.1",
+    "express": "^4.17.1"
+  }
+}
