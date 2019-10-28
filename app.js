@@ -6,10 +6,19 @@ app.set('view engine', 'ejs');
 
 // root route
 app.get('/', (req, res)=> {
-    res.render('Welcome to Yelp Camp!');
+    res.render('landing');
 });
 
+// allow user to READ all camp grounds. This is an array for now but will be rows in a MongoDB later
+app.get('/campgrounds', (req, res)=> {
+    let campgrounds = [
+        {name: 'Salmon Creek', image: ''},
+        {name: 'Rodborough Fort', image: ''},
+        {name: 'WOMAD Festival', image: ''}
+    ];
 
+
+});
 
 
 //start the node server
