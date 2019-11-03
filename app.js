@@ -1,7 +1,9 @@
 const express = require('express');
 const app = express();
+const bodyParser = require('body-parser');
 
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
 // root route
@@ -19,6 +21,18 @@ app.get('/campgrounds', (req, res)=> {
 
     res.render('campgrounds', {campgrounds: campgrounds});
 });
+
+// route to the form page. User will CREATE a new camp ground via the form and submit this. Submit btn will use that POST route below
+app.get('/campgrounds/new', (req, res)=> {
+    res.render('new');
+})
+
+// allow user to CREATE a new campground. Following the RESTful convention, both the POST and GET methods for the campground resource
+// should point to /campgrounds
+app.post('/campgrounds', (req, res)=> {
+    // grab data from the user's form and add it into the campgrounds array
+    res.send('You have made a POST request');
+})
 
 
 //start the node server
