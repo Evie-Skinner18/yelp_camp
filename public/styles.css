@@ -11,3 +11,11 @@
     display: flex;
     flex-wrap: wrap;
 }
+
+.campground-form {
+    width: 50%;
+    text-align: center;
+    margin-top: 1%;
+    margin-right: auto;
+    margin-left: auto;
+}
