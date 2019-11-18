@@ -1,14 +1,21 @@
 #app-body {
     font-family: 'Oleo Script', cursive;
     font-weight: 50;
-    margin-top: 5%;
 }
 
 .campground {
     padding: 10px;
     margin-top: 10px;
     width: 80%;
-    height: 80%;
+    /* height: 80%; */
     display: flex;
     flex-wrap: wrap;
+}
+
+.campground-form {
+    width: 50%;
+    text-align: center;
+    margin-top: 2%;
+    margin-right: auto;
+    margin-left: auto;
 }
