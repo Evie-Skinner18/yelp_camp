@@ -27,6 +27,21 @@ const campgroundSchema = new mongoose.Schema({
     image: String    
 });
 
+// model the campground in JS using Mongoose
+const Campground = mongoose.model('Campground', campgroundSchema);
+
+// Campground.create({
+//     name: 'Rodborough Fort',
+//     image: 'https://images.unsplash.com/photo-1508873696983-2dfd5898f08b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'
+// }, function(err, campground){
+//     if(err){
+//         console.log('Oh no there\'s been an error!');
+//     }
+//     else{
+//         console.log(`The ${campground.name} campground has been added to the DB`);
+//     }
+// });
+
 // root route
 app.get('/', (req, res)=> {
     res.render('landing');
