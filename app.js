@@ -21,6 +21,11 @@ const campgroundSchema = new mongoose.Schema({
 // model the campground in JS using Mongoose
 const Campground = mongoose.model('Campground', campgroundSchema);
 
+// Campground.create({
+//     name: 'Doggie Camp',
+//     image: 'https://images.unsplash.com/photo-1534361960057-19889db9621e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80',
+//     description: 'The camp where dogs can fully express their doggie selves'
+// });
 
 // root route
 app.get('/', (req, res)=> {
@@ -35,7 +40,7 @@ app.get('/campgrounds', (req, res)=> {
             res.send('Oh no I can\'t find any campgrounds!');
         }
         else{
-            res.render('campgrounds', {campgrounds: allCampgrounds});
+            res.render('index', {campgrounds: allCampgrounds});
         }
     });
 });
@@ -60,7 +65,7 @@ app.post('/campgrounds', (req, res)=> {
             res.send('Oh no there is an error!');
         }
         else{
-            res.redirect('/campgrounds');
+            res.redirect('/index');
         }
     });
 })
@@ -68,7 +73,10 @@ app.post('/campgrounds', (req, res)=> {
 // SHOW the campground of id [id]
 app.get('/campgrounds/:id', (req, res)=> {
    //Campground.find(id) 
-   res.send('This will be the SHOW page');
+   // find the campground with the given ID
+
+   // render it on the show view
+   res.render('show');
 });
 
 
