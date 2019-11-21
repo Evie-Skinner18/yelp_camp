@@ -14,7 +14,8 @@ mongoose.connect('mongodb://localhost:27017/yelpCamp', {useNewUrlParser: true, u
 // set up schema
 const campgroundSchema = new mongoose.Schema({
     name: String,
-    image: String    
+    image: String,
+    description: String    
 });
 
 // model the campground in JS using Mongoose
@@ -64,6 +65,12 @@ app.post('/campgrounds', (req, res)=> {
     });
 })
 
+// SHOW the campground of id [id]
+app.get('/campgrounds/:id', (req, res)=> {
+   //Campground.find(id) 
+   res.send('This will be the SHOW page');
+});
+
 
 //start the node server
 const port = process.env.PORT || 3000;
@@ -80,4 +87,4 @@ Name        Url             Http verb   Desc
 INDEX       /campgrounds    GET         Display list of all campgrounds
 NEW        /campgrounds/new GET         Display form to create new campground
 CREATE     /campgrounds     POST        Add newly created campground to DB 
-SHOW       /campgrounds/:id GET         Show info about this particular campground 
+SHOW       /campgrounds/:id GET         Show info about this particular campground */
