@@ -1,48 +1,90 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
-// mini DB inside an array
-let campgrounds = [
-    {name: 'Salmon Creek', image: 'https://images.unsplash.com/photo-1504851149312-7a075b496cc7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=649&q=80'},
-    {name: 'Rodborough Fort', image: 'https://images.unsplash.com/photo-1508873696983-2dfd5898f08b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'},
-    {name: 'WOMAD Festival', image: 'https://images.unsplash.com/photo-1510312305653-8ed496efae75?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80'},
-    {name: 'WOMAD Festival', image: 'https://images.unsplash.com/photo-1510312305653-8ed496efae75?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80'},
-    {name: 'WOMAD Festival', image: 'https://images.unsplash.com/photo-1510312305653-8ed496efae75?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80'},
-    {name: 'WOMAD Festival', image: 'https://images.unsplash.com/photo-1510312305653-8ed496efae75?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80'},
-    {name: 'WOMAD Festival', image: 'https://images.unsplash.com/photo-1510312305653-8ed496efae75?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1267&q=80'}
-];
+
+// connect to the DB
+mongoose.connect('mongodb://localhost:27017/yelpCamp', {useNewUrlParser: true, useUnifiedTopology: true});
+
+// set up schema
+const campgroundSchema = new mongoose.Schema({
+    name: String,
+    image: String,
+    description: String    
+});
+
+// model the campground in JS using Mongoose
+const Campground = mongoose.model('Campground', campgroundSchema);
+
+// Campground.create({
+//     name: 'Doggie Camp',
+//     image: 'https://images.unsplash.com/photo-1534361960057-19889db9621e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80',
+//     description: 'The camp where dogs can fully express their doggie selves'
+// });
 
 // root route
 app.get('/', (req, res)=> {
     res.render('landing');
 });
 
-// allow user to READ all camp grounds. This is an array for now but will be rows in a MongoDB later
+// INDEX - show all campgrounds
+// allow user to READ all camp grounds. This shows records in the campgrounds collection of the yelpCamp DB
 app.get('/campgrounds', (req, res)=> {
-
-    res.render('campgrounds', {campgrounds: campgrounds});
+    Campground.find(function(err, allCampgrounds){
+        if(err){
+            res.send('Oh no I can\'t find any campgrounds!');
+        }
+        else{
+            res.render('index', {campgrounds: allCampgrounds});
+        }
+    });
 });
 
-// route to the form page. User will CREATE a new camp ground via the form and submit this. Submit btn will use that POST route below
+// NEW
+// route to the create form page shown to the user. Submit btn will use that POST route below
 app.get('/campgrounds/new', (req, res)=> {
     res.render('new');
 })
 
-// allow user to CREATE a new campground. Following the RESTful convention, both the POST and GET methods for the campground resource
-// should point to /campgrounds
+// CREATE
+// allow user to create a new campground and POST it. Following the RESTful convention, both the POST and GET methods 
+//for the campground resource should point to /campgrounds
 app.post('/campgrounds', (req, res)=> {
-    // grab data from the user's form and add it into the campgrounds array
+    // grab data from the user's form
     let campgroundName = req.body.name;
     let campgroundImage = req.body.image;
-    let newCampground = {name: campgroundName, image: campgroundImage};
-    campgrounds.push(newCampground);
-    res.redirect('/campgrounds');
+    let campgroundDescription = req.body.description;
+    let newCampground = {name: campgroundName, image: campgroundImage, description: campgroundDescription};
+    // create a new campground an d save to the DB
+    Campground.create(newCampground, function(err, newlyCreatedCampground){
+        if(err){
+            res.send('Oh no there is an error!');
+        }
+        else{
+            res.redirect('/campgrounds');
+        }
+    });
 })
+
+// SHOW the campground of id [id]
+app.get('/campgrounds/:id', (req, res)=> {
+   //Campground.find(id) 
+   // find the campground with the given ID
+   Campground.findById(req.params.id, function(err, foundCampground){
+       if(err){
+           res.send('Sorry I can\'t find that campground!');
+       }
+       else{           
+        // render it on the show view by passing it as a property to the res.render
+           res.render('show', {campground: foundCampground});
+       }
+   });
+});
 
 
 //start the node server
@@ -50,3 +92,14 @@ const port = process.env.PORT || 3000;
 app.listen(port, function () {
   console.log('Yelp Camp has started!');
 });
+
+
+
+/* RESTFUL ROUTES for the campground resource
+
+Name        Url             Http verb   Desc  
+========================================================================
+INDEX       /campgrounds    GET         Display list of all campgrounds
+NEW        /campgrounds/new GET         Display form to create new campground
+CREATE     /campgrounds     POST        Add newly created campground to DB 
+SHOW       /campgrounds/:id GET         Show info about this particular campground */

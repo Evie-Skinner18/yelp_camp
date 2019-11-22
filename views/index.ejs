@@ -20,12 +20,13 @@
                         <img src=  <%= `${campground.image}` %> class="campground" alt="Photo of the campground">
                         <div class="caption">
                             <h4><%= campground.name %></h4>
+                            <a href= "/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
                         </div>        
                     </div>
                 </div>           
             <% });        %>        
         </div>
-        <footer>
+        <footer class="footer-style">
             <form action="/" method="GET">
                 <button class="btn btn-lg btn-info">Back</button>
             </form>
