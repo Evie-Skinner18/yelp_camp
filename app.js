@@ -58,14 +58,15 @@ app.post('/campgrounds', (req, res)=> {
     // grab data from the user's form
     let campgroundName = req.body.name;
     let campgroundImage = req.body.image;
-    let newCampground = {name: campgroundName, image: campgroundImage};
+    let campgroundDescription = req.body.description;
+    let newCampground = {name: campgroundName, image: campgroundImage, description: campgroundDescription};
     // create a new campground an d save to the DB
     Campground.create(newCampground, function(err, newlyCreatedCampground){
         if(err){
             res.send('Oh no there is an error!');
         }
         else{
-            res.redirect('/index');
+            res.redirect('/campgrounds');
         }
     });
 })
@@ -74,9 +75,15 @@ app.post('/campgrounds', (req, res)=> {
 app.get('/campgrounds/:id', (req, res)=> {
    //Campground.find(id) 
    // find the campground with the given ID
-
-   // render it on the show view
-   res.render('show');
+   Campground.findById(req.params.id, function(err, foundCampground){
+       if(err){
+           res.send('Sorry I can\'t find that campground!');
+       }
+       else{           
+        // render it on the show view by passing it as a property to the res.render
+           res.render('show', {campground: foundCampground});
+       }
+   });
 });
 
 
