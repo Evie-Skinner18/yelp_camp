@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const Post = require('../models/post');
-const User = require('../models/user');
+const Post = require('../modelsExercises/post');
+const User = require('../modelsExercises/user');
 
 mongoose.connect('mongodb://localhost:27017/demoDb2', {useNewUrlParser: true, useUnifiedTopology: true});
 
